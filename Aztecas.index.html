@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz de los Aztecas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 40px;
+    }
+    .quiz {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: inline-block;
+      max-width: 400px;
+    }
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      width: 80%;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    #siguiente {
+      background: #2ecc71;
+    }
+    #siguiente:hover {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Quiz de los Aztecas</h1>
+  <div class="quiz">
+    <p id="pregunta"></p>
+    <div id="opciones"></div>
+    <p id="resultado"></p>
+    <p><b>Puntaje:</b> <span id="puntaje">0</span></p>
+    <button id="siguiente" onclick="siguientePregunta()" disabled>➡️ Siguiente</button>
+  </div>
+
+  <script>
+    const preguntas = [
+      { pregunta: "¿Cuál fue la capital del Imperio azteca?", opciones: ["Tenochtitlán", "Texcoco", "Tlaxcala"], correcta: 0 },
+      { pregunta: "¿Qué dios azteca era el del sol y la guerra?", opciones: ["Quetzalcóatl", "Huitzilopochtli", "Tezcatlipoca"], correcta: 1 },
+      { pregunta: "¿Qué instrumento utilizaban para escribir y llevar registros?", opciones: ["Códices", "Quipus", "Jeroglíficos"], correcta: 0 },
+      { pregunta: "¿Qué cultivo fue fundamental en la alimentación azteca?", opciones: ["Maíz", "Papa", "Trigo"], correcta: 0 },
+      { pregunta: "¿Qué estructura principal tenían en el centro de Tenochtitlán?", opciones: ["Templo Mayor", "Machu Picchu", "Piramide del Sol"], correcta: 0 },
+      { pregunta: "¿Qué animal usaban para alimentación y sacrificios?", opciones: ["Llama", "Guajolote (pavo)", "Caballo"], correcta: 1 },
+      { pregunta: "¿Qué escritura usaban los aztecas?", opciones: ["Pictografía", "Alfabética", "Cuneiforme"], correcta: 0 }
+    ];
+
+    let indice = 0;
+    let puntaje = 0;
+
+    function mostrarPregunta() {
+      document.getElementById("resultado").textContent = "";
+      document.getElementById("siguiente").disabled = true;
+      const p = preguntas[indice];
+      document.getElementById("pregunta").textContent = p.pregunta;
+      const opcionesDiv = document.getElementById("opciones");
+      opcionesDiv.innerHTML = "";
+      p.opciones.forEach((opcion, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opcion;
+        btn.onclick = () => verificarRespuesta(i);
+        opcionesDiv.appendChild(btn);
+      });
+    }
+
+    function verificarRespuesta(opcion) {
+      const p = preguntas[indice];
+      const resultado = document.getElementById("resultado");
+      const botones = document.querySelectorAll("#opciones button");
+
+      botones.forEach(b => b.disabled = true);
+      document.getElementById("siguiente").disabled = false;
+
+      if (opcion === p.correcta) {
+        resultado.textContent = "✅ ¡Correcto!";
+        resultado.style.color = "green";
+        puntaje++;
+        document.getElementById("puntaje").textContent = puntaje;
+      } else {
+        resultado.textContent = "❌ Incorrecto";
+        resultado.style.color = "red";
+      }
+    }
+
+    function siguientePregunta() {
+      indice++;
+      if (indice < preguntas.length) {
+        mostrarPregunta();
+      } else {
+        document.getElementById("pregunta").textContent = "🏆 ¡Juego terminado!";
+        document.getElementById("opciones").innerHTML = "";
+        document.getElementById("resultado").textContent = "Tu puntaje final es: " + puntaje + "/" + preguntas.length;
+        document.getElementById("siguiente").style.display = "none";
+      }
+    }
+
+    mostrarPregunta();
+  </script>
+</body>
+</html>

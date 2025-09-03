@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz de los Incas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 40px;
+    }
+    .quiz {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: inline-block;
+      max-width: 400px;
+    }
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      width: 80%;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    #siguiente {
+      background: #2ecc71;
+    }
+    #siguiente:hover {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Quiz de los Incas</h1>
+  <div class="quiz">
+    <p id="pregunta"></p>
+    <div id="opciones"></div>
+    <p id="resultado"></p>
+    <p><b>Puntaje:</b> <span id="puntaje">0</span></p>
+    <button id="siguiente" onclick="siguientePregunta()" disabled>➡️ Siguiente</button>
+  </div>
+
+  <script>
+    const preguntas = [
+      { pregunta: "¿Cuál fue la capital del Imperio inca?", opciones: ["Cusco", "Quito", "Lima"], correcta: 0 },
+      { pregunta: "¿Qué idioma hablaban los incas?", opciones: ["Náhuatl", "Quechua", "Aymara"], correcta: 1 },
+      { pregunta: "¿Qué sistema de nudos usaban para registros?", opciones: ["Jeroglíficos", "Quipus", "Runas"], correcta: 1 },
+      { pregunta: "¿Cómo llamaban a su rey o emperador?", opciones: ["Tlatoani", "Sapa Inca", "Cacique"], correcta: 1 },
+      { pregunta: "¿Qué ciudadela construyeron en los Andes?", opciones: ["Machu Picchu", "Teotihuacán", "Tikal"], correcta: 0 },
+      { pregunta: "¿Qué cultivo fue muy importante para los incas?", opciones: ["Trigo", "Papa", "Cebada"], correcta: 1 },
+      { pregunta: "¿Qué animal usaban como carga y por su lana?", opciones: ["Llama", "Caballo", "Búfalo"], correcta: 0 }
+    ];
+
+    let indice = 0;
+    let puntaje = 0;
+
+    function mostrarPregunta() {
+      document.getElementById("resultado").textContent = "";
+      document.getElementById("siguiente").disabled = true; // desactivar botón hasta responder
+      const p = preguntas[indice];
+      document.getElementById("pregunta").textContent = p.pregunta;
+      const opcionesDiv = document.getElementById("opciones");
+      opcionesDiv.innerHTML = "";
+      p.opciones.forEach((opcion, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opcion;
+        btn.onclick = () => verificarRespuesta(i);
+        opcionesDiv.appendChild(btn);
+      });
+    }
+
+    function verificarRespuesta(opcion) {
+      const p = preguntas[indice];
+      const resultado = document.getElementById("resultado");
+      const botones = document.querySelectorAll("#opciones button");
+
+      botones.forEach(b => b.disabled = true); // desactivar todas las opciones
+      document.getElementById("siguiente").disabled = false; // activar botón siguiente
+
+      if (opcion === p.correcta) {
+        resultado.textContent = "✅ ¡Correcto!";
+        resultado.style.color = "green";
+        puntaje++;
+        document.getElementById("puntaje").textContent = puntaje;
+      } else {
+        resultado.textContent = "❌ Incorrecto";
+        resultado.style.color = "red";
+      }
+    }
+
+    function siguientePregunta() {
+      indice++;
+      if (indice < preguntas.length) {
+        mostrarPregunta();
+      } else {
+        document.getElementById("pregunta").textContent = "🏆 ¡Juego terminado!";
+        document.getElementById("opciones").innerHTML = "";
+        document.getElementById("resultado").textContent = "Tu puntaje final es: " + puntaje + "/" + preguntas.length;
+        document.getElementById("siguiente").style.display = "none"; // ocultar botón
+      }
+    }
+
+    // Primera pregunta
+    mostrarPregunta();
+  </script>
+</body>
+</html>
